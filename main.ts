@@ -43,26 +43,22 @@ input.onSound(DetectedSound.Loud, function () {
         `)
 })
 input.onButtonPressed(Button.A, function () {
+    luminosité = luminosité - 8
     strip.showColor(neopixel.colors(NeoPixelColors.Green))
     On = true
-    basic.showLeds(`
-        . . . . .
-        . . . . #
-        . . . . .
-        . . . . .
-        # . # . #
-        `)
+    basic.showString("" + (luminosité))
+    if (luminosité <= 8) {
+        luminosité = 8
+    }
 })
 input.onButtonPressed(Button.B, function () {
+    luminosité = luminosité + 8
     strip.showColor(neopixel.colors(NeoPixelColors.Violet))
     On = true
-    basic.showLeds(`
-        # . # . #
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        `)
+    basic.showString("" + (luminosité))
+    if (luminosité >= 255) {
+        luminosité = 247
+    }
 })
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     strip.showColor(neopixel.colors(NeoPixelColors.Green))
@@ -70,11 +66,13 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     On = false
 })
 let On = false
+let luminosité = 0
 let strip: neopixel.Strip = null
 pins.touchSetMode(TouchTarget.P0, TouchTargetMode.Capacitive)
 pins.touchSetMode(TouchTarget.P1, TouchTargetMode.Capacitive)
 strip = neopixel.create(DigitalPin.P2, 12, NeoPixelMode.RGB)
-input.setSoundThreshold(SoundThreshold.Loud, 1024)
+luminosité = 128
+input.setSoundThreshold(SoundThreshold.Loud, 199)
 strip.showRainbow(1, 360)
 basic.pause(1000)
 strip.showColor(neopixel.colors(NeoPixelColors.Black))
@@ -87,6 +85,7 @@ basic.showLeds(`
     . . # . .
     `)
 basic.forever(function () {
+    strip.setBrightness(luminosité)
     if (input.pinIsPressed(TouchPin.P0)) {
         basic.showLeds(`
             . . # . .
